@@ -6,97 +6,120 @@ import { ArrowRight } from "lucide-react";
 
 export function HeroSection() {
   return (
-    <section className="relative min-h-[85vh] lg:min-h-[90vh] bg-[#f8f5f0] overflow-hidden">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-full">
-        <div className="grid lg:grid-cols-2 gap-8 lg:gap-16 items-center min-h-[85vh] lg:min-h-[90vh] py-16 lg:py-0">
+    <section className="relative bg-[#f8f5f0] overflow-hidden">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="grid lg:grid-cols-[1fr_420px] xl:grid-cols-[1fr_480px] gap-12 lg:gap-16 items-center min-h-[88vh] py-20 lg:py-16">
 
-          {/* Text Content */}
-          <div className="order-2 lg:order-1 animate-fade-in">
-            <div className="inline-flex items-center gap-2 bg-black/5 rounded-full px-4 py-1.5 text-xs tracking-widest uppercase font-medium mb-6">
-              <span className="w-1.5 h-1.5 rounded-full bg-black"></span>
-              New Collection Available
+          {/* ── Text content ──────────────────────────────────── */}
+          <div className="order-2 lg:order-1 animate-fade-up">
+
+            {/* Label */}
+            <div className="flex items-center gap-3 mb-10">
+              <span className="h-px w-10 bg-black/25" />
+              <span className="text-[11px] tracking-[0.22em] uppercase text-neutral-500 font-medium">
+                New Collection · 2024/25
+              </span>
             </div>
 
-            <h1 className="text-5xl sm:text-6xl lg:text-7xl xl:text-8xl font-light tracking-tight leading-none mb-6">
-              it&apos;s more<br />
-              <span className="font-bold">than a</span><br />
-              <span className="italic font-light">gift.</span>
+            {/* Heading */}
+            <h1 className="font-light tracking-tight leading-[1.02] mb-8">
+              <span className="block text-[clamp(2.6rem,6.5vw,5rem)]">it&apos;s more</span>
+              <span className="block text-[clamp(2.6rem,6.5vw,5rem)]">than a</span>
+              <span
+                className="block italic text-[clamp(3rem,7.5vw,6rem)] text-[#0a0a0a]"
+                style={{ fontFamily: "var(--font-display)" }}
+              >
+                gift.
+              </span>
             </h1>
 
-            <p className="text-neutral-600 text-lg leading-relaxed mb-8 max-w-md">
+            {/* Body */}
+            <p className="text-neutral-600 text-base lg:text-[1.0625rem] leading-[1.75] mb-10 max-w-[380px]">
               ipalo — a Zambian name meaning{" "}
-              <em className="not-italic font-medium text-black">&quot;a gift&quot;</em>. Born from love
-              and designed for life. Premium clothing & lifestyle pieces for every
-              beautiful moment.
+              <span className="font-semibold text-black">&quot;a gift&quot;</span>. Born from love,
+              designed for life. Premium clothing &amp; lifestyle pieces for every beautiful moment.
             </p>
 
-            <div className="flex flex-wrap gap-3">
+            {/* CTAs */}
+            <div className="flex flex-wrap gap-3 mb-14">
               <Link
                 href="/shop"
-                className="inline-flex items-center gap-2 bg-black text-white px-7 py-3.5 rounded-md text-sm font-medium tracking-wide hover:bg-neutral-800 transition-colors group"
+                className="inline-flex items-center gap-2.5 bg-black text-white px-7 py-3.5 rounded-lg text-sm font-medium tracking-wide hover:bg-neutral-800 transition-colors group"
               >
                 Shop Now
-                <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
+                <ArrowRight className="h-4 w-4 group-hover:translate-x-0.5 transition-transform" />
               </Link>
               <Link
                 href="/about"
-                className="inline-flex items-center gap-2 border border-black/20 text-black px-7 py-3.5 rounded-md text-sm font-medium tracking-wide hover:border-black transition-colors"
+                className="inline-flex items-center px-7 py-3.5 rounded-lg text-sm font-medium tracking-wide border border-black/20 hover:border-black transition-colors"
               >
                 Our Story
               </Link>
             </div>
 
             {/* Stats */}
-            <div className="flex gap-8 mt-12 pt-8 border-t border-black/10">
-              <div>
-                <p className="text-2xl font-bold">500+</p>
-                <p className="text-xs text-neutral-500 tracking-wide">Happy Customers</p>
-              </div>
-              <div>
-                <p className="text-2xl font-bold">9</p>
-                <p className="text-xs text-neutral-500 tracking-wide">SA Provinces Delivered</p>
-              </div>
-              <div>
-                <p className="text-2xl font-bold">100%</p>
-                <p className="text-xs text-neutral-500 tracking-wide">Quality Guaranteed</p>
-              </div>
+            <div className="flex gap-8 sm:gap-12 pt-8 border-t border-black/10">
+              {[
+                { n: "500+",  label: "Happy customers" },
+                { n: "9",     label: "SA provinces" },
+                { n: "100%",  label: "Quality guaranteed" },
+              ].map(({ n, label }) => (
+                <div key={label}>
+                  <p className="text-2xl font-bold leading-none mb-1">{n}</p>
+                  <p className="text-[11px] text-neutral-500 tracking-wide uppercase">{label}</p>
+                </div>
+              ))}
             </div>
           </div>
 
-          {/* Image */}
+          {/* ── Product image ──────────────────────────────────── */}
           <div className="order-1 lg:order-2 relative">
-            <div className="relative aspect-[4/5] rounded-2xl overflow-hidden bg-[#e8e0d4]">
+
+            {/* Main card */}
+            <div className="relative aspect-[3/4] rounded-2xl overflow-hidden bg-[#e8e0d4]">
               <Image
                 src="/logo-tee.png"
-                alt="ipalo tee — it's more than a gift"
+                alt="ipalo Signature Tee"
                 fill
                 className="object-cover"
                 priority
+                sizes="(max-width: 1024px) 80vw, 480px"
               />
 
-              {/* Floating badge */}
-              <div className="absolute top-4 right-4 bg-white rounded-xl px-4 py-3 shadow-lg">
-                <p className="text-[10px] text-neutral-500 tracking-widest uppercase">New In</p>
-                <p className="text-sm font-bold">Tees & Tops</p>
+              {/* Chip — top right */}
+              <div className="absolute top-4 right-4 bg-white/95 backdrop-blur-sm rounded-xl px-4 py-3 shadow-md">
+                <p className="text-[10px] text-neutral-500 tracking-widest uppercase mb-0.5">New In</p>
+                <p className="text-sm font-semibold">Tees &amp; Tops</p>
               </div>
 
-              {/* Bottom label */}
-              <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent p-6">
-                <p className="text-white/70 text-xs tracking-widest uppercase mb-1">Signature Collection</p>
-                <p className="text-white text-xl font-light">Classic Logo Tee</p>
+              {/* Bottom gradient overlay */}
+              <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/60 to-transparent px-6 pb-6 pt-14">
+                <p className="text-white/65 text-[10px] tracking-widest uppercase mb-1">
+                  Signature Collection
+                </p>
+                <p className="text-white text-lg font-light">Classic Logo Tee</p>
               </div>
             </div>
 
-            {/* Accent image */}
-            <div className="absolute -bottom-8 -left-8 w-40 h-40 rounded-xl overflow-hidden bg-[#e8e0d4] shadow-xl hidden lg:block">
+            {/* Accent card — bottom left */}
+            <div className="absolute -bottom-6 -left-6 w-36 h-36 rounded-xl overflow-hidden bg-[#e8e0d4] shadow-xl hidden lg:block ring-4 ring-[#f8f5f0]">
               <Image
                 src="/logo-hoodie.png"
-                alt="ipalo hoodie"
+                alt="ipalo Hoodie"
                 fill
                 className="object-cover"
+                sizes="144px"
               />
             </div>
+
+            {/* Brand pill — top right of section */}
+            <div className="absolute -top-4 -right-4 hidden lg:flex items-center gap-1.5 bg-black text-white text-[10px] tracking-[0.18em] uppercase font-medium px-4 py-2 rounded-full shadow-lg">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#c9a96e]" />
+              ipalo™
+            </div>
+
           </div>
+
         </div>
       </div>
     </section>
