@@ -1,26 +1,149 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+/* ─── Ipalo Brand Theme ───────────────────────────────────────────────────── */
+
+@theme {
+  /* Brand Colors */
+  --color-brand-black: #0a0a0a;
+  --color-brand-white: #ffffff;
+  --color-brand-cream: #f8f5f0;
+  --color-brand-warm: #e8e0d4;
+  --color-brand-gold: #c9a96e;
+  --color-brand-gold-light: #e8d5a8;
+  --color-brand-gray: #6b6b6b;
+  --color-brand-gray-light: #d4d4d4;
+
+  /* Semantic */
+  --color-background: var(--color-brand-white);
+  --color-foreground: var(--color-brand-black);
+  --color-muted: var(--color-brand-cream);
+  --color-muted-foreground: var(--color-brand-gray);
+  --color-border: #e5e5e5;
+  --color-input: #f4f4f4;
+  --color-ring: var(--color-brand-black);
+  --color-primary: var(--color-brand-black);
+  --color-primary-foreground: var(--color-brand-white);
+  --color-accent: var(--color-brand-cream);
+  --color-accent-foreground: var(--color-brand-black);
+  --color-destructive: #ef4444;
+
+  /* Typography */
+  --font-sans: "Inter", system-ui, sans-serif;
+  --font-display: "Playfair Display", Georgia, serif;
+
+  /* Spacing */
+  --radius-sm: 0.25rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.75rem;
+  --radius-xl: 1rem;
+  --radius-full: 9999px;
+
+  /* Animation */
+  --ease-spring: cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+/* ─── Base Styles ─────────────────────────────────────────────────────────── */
+
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  scroll-behavior: smooth;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background-color: var(--color-background);
+  color: var(--color-foreground);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ─── Custom Utilities ────────────────────────────────────────────────────── */
+
+.container-px {
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+@media (min-width: 640px) {
+  .container-px {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .container-px {
+    padding-left: 2rem;
+    padding-right: 2rem;
+  }
+}
+
+/* ─── Scrollbar ───────────────────────────────────────────────────────────── */
+
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-brand-cream);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-brand-gray-light);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-brand-gray);
+}
+
+/* ─── Animations ──────────────────────────────────────────────────────────── */
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideInRight {
+  from { transform: translateX(100%); }
+  to { transform: translateX(0); }
+}
+
+@keyframes slideInLeft {
+  from { transform: translateX(-100%); }
+  to { transform: translateX(0); }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.4s ease forwards;
+}
+
+.animate-slide-in-right {
+  animation: slideInRight 0.35s ease forwards;
+}
+
+/* ─── Product Image Hover ─────────────────────────────────────────────────── */
+
+.product-image-hover {
+  overflow: hidden;
+}
+
+.product-image-hover img {
+  transition: transform 0.5s ease;
+}
+
+.product-image-hover:hover img {
+  transform: scale(1.05);
+}
+
+/* ─── Focus Styles ────────────────────────────────────────────────────────── */
+
+:focus-visible {
+  outline: 2px solid var(--color-brand-black);
+  outline-offset: 2px;
 }

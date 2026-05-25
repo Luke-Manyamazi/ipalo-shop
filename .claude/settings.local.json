@@ -2,7 +2,14 @@
   "permissions": {
     "allow": [
       "PowerShell(npm *)",
-      "PowerShell(Head *)"
+      "PowerShell(Head *)",
+      "PowerShell(New-Item *)",
+      "PowerShell(cd \"C:\\\\Users\\\\Luke\\\\Dev\\\\ipalo-shop\"; $env:DATABASE_URL = \"postgresql://postgres:postgres@localhost:5432/ipalo\"; npx prisma generate 2>&1 | Select-Object -Last 10)",
+      "PowerShell(cd \"C:\\\\Users\\\\Luke\\\\Dev\\\\ipalo-shop\"; $env:DATABASE_URL = \"postgresql://postgres:postgres@localhost:5432/ipalo\"; $env:DIRECT_URL = \"postgresql://postgres:postgres@localhost:5432/ipalo\"; npx prisma generate 2>&1 | Select-Object -Last 10)",
+      "PowerShell(supabase *)",
+      "PowerShell(cd \"C:\\\\Users\\\\Luke\\\\Dev\\\\ipalo-shop\"; npx tsx scripts/verify-db.ts 2>&1 | Where-Object { $_ -notmatch \"injected env|tip:\" })",
+      "PowerShell(cd \"C:\\\\Users\\\\Luke\\\\Dev\\\\ipalo-shop\"; npx tsx scripts/update-admin.ts 2>&1 | Where-Object { $_ -notmatch \"injected env|tip:\" })",
+      "PowerShell(vercel *)"
     ]
   }
 }
