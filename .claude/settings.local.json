@@ -26,7 +26,10 @@
       "Bash(Get-ChildItem -Path \"C:\\\\Users\\\\Luke\\\\Documents\\\\Brand Ipalo\" -File)",
       "Bash(Select-Object Name)",
       "Bash(npm run *)",
-      "Bash(npx tsx *)"
+      "Bash(npx tsx *)",
+      "Bash(git reset *)",
+      "Bash(git commit -m 'feat: brand logo, 12 new products, 13 new pages, phone number, sign-in fix *)",
+      "Bash(grep -v \"^$\")"
     ]
   }
 }
