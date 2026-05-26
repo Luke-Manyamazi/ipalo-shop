@@ -1,10 +1,13 @@
 import NextAuth from "next-auth";
-import { PrismaAdapter } from "@auth/prisma-adapter";
 import Credentials from "next-auth/providers/credentials";
 import Google from "next-auth/providers/google";
-import { db } from "@/lib/db";
 import bcrypt from "bcryptjs";
 import { z } from "zod";
+import { supabase } from "@/lib/supabase-admin";
+
+// Note: PrismaAdapter removed — NextAuth uses JWT strategy so no DB adapter
+// is needed for session management. Sign-in uses Supabase REST API for user
+// lookup (Prisma can't reach Supabase DB from Vercel's IPv6 environment).
 
 const loginSchema = z.object({
   email: z.string().email(),
@@ -12,7 +15,6 @@ const loginSchema = z.object({
 });
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
-  adapter: PrismaAdapter(db),
   session: { strategy: "jwt" },
   pages: {
     signIn: "/auth/login",
@@ -29,11 +31,14 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         const parsed = loginSchema.safeParse(credentials);
         if (!parsed.success) return null;
 
-        const user = await db.user.findUnique({
-          where: { email: parsed.data.email },
-        });
+        // Use Supabase REST API instead of Prisma (works via HTTPS from Vercel)
+        const { data: user, error } = await supabase
+          .from("users")
+          .select("id, email, name, image, password, role")
+          .eq("email", parsed.data.email)
+          .single();
 
-        if (!user || !user.password) return null;
+        if (error || !user || !user.password) return null;
 
         const passwordMatch = await bcrypt.compare(
           parsed.data.password,

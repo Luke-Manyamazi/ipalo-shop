@@ -1,35 +1,32 @@
 import Link from "next/link";
 import Image from "next/image";
 import { ArrowRight } from "lucide-react";
-import { db } from "@/lib/db";
-
-async function getCategories() {
-  try {
-    const cats = await db.category.findMany({
-      where: { slug: { in: ["kids-baby", "women", "accessories"] } },
-      include: { _count: { select: { products: { where: { active: true } } } } },
-    });
-    return cats;
-  } catch {
-    return [];
-  }
-}
+import { getCategories, getCategoryProductCount } from "@/lib/supabase-admin";
 
 const META: Record<string, { bg: string; image: string; desc: string }> = {
-  "kids-baby":  { bg: "#f8f5f0", image: "/logo-tee.png",  desc: "Soft & safe for the littlest gifts" },
-  women:        { bg: "#e8e0d4", image: "/logo-tee.png",  desc: "Style that speaks volumes" },
-  accessories:  { bg: "#f0ece6", image: "/logo-tote.png", desc: "The finishing touch" },
+  "kids-baby":  { bg: "#f8f5f0", image: "/brand/baby-sweatsuit.png", desc: "Soft & safe for the littlest gifts" },
+  women:        { bg: "#e8e0d4", image: "/brand/womens-tank.png",    desc: "Style that speaks volumes" },
+  accessories:  { bg: "#f0ece6", image: "/brand/bucket-hat.png",     desc: "The finishing touch" },
 };
 
 const FALLBACK = [
-  { id: "1", name: "Kids & Baby",  slug: "kids-baby",  _count: { products: 0 } },
-  { id: "2", name: "Women",        slug: "women",       _count: { products: 0 } },
-  { id: "3", name: "Accessories",  slug: "accessories", _count: { products: 0 } },
+  { id: "1", name: "Kids & Baby",  slug: "kids-baby",  count: 0 },
+  { id: "2", name: "Women",        slug: "women",       count: 0 },
+  { id: "3", name: "Accessories",  slug: "accessories", count: 0 },
 ];
 
 export async function FeaturedCategories() {
-  const categories = await getCategories();
-  const list = categories.length > 0 ? categories : FALLBACK;
+  const cats = await getCategories(["kids-baby", "women", "accessories"]);
+
+  const list =
+    cats.length > 0
+      ? await Promise.all(
+          cats.map(async (c) => ({
+            ...c,
+            count: await getCategoryProductCount(c.id),
+          }))
+        )
+      : FALLBACK;
 
   return (
     <section className="py-24 lg:py-32 bg-white">
@@ -61,7 +58,7 @@ export async function FeaturedCategories() {
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-5">
           {list.map((cat, i) => {
             const m = META[cat.slug] ?? META["kids-baby"];
-            const count = "_count" in cat ? cat._count.products : 0;
+            const count = "count" in cat ? cat.count : 0;
             return (
               <Link
                 key={cat.id}

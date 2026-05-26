@@ -1,24 +1,10 @@
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { ProductCard } from "@/components/products/ProductCard";
-import { db } from "@/lib/db";
-
-async function getFeaturedProducts() {
-  try {
-    const products = await db.product.findMany({
-      where: { active: true, featured: true },
-      take: 4,
-      orderBy: { createdAt: "desc" },
-      include: { category: true, variants: true },
-    });
-    return products;
-  } catch {
-    return [];
-  }
-}
+import { getFeaturedProducts, toProductCard } from "@/lib/supabase-admin";
 
 export async function FeaturedProducts() {
-  const products = await getFeaturedProducts();
+  const products = await getFeaturedProducts(4);
 
   return (
     <section className="py-20 lg:py-28 bg-white">
@@ -48,25 +34,23 @@ export async function FeaturedProducts() {
           </div>
         ) : (
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6">
-            {products.map((product) => (
-              <ProductCard
-                key={product.id}
-                id={product.id}
-                name={product.name}
-                slug={product.slug}
-                price={Number(product.price)}
-                comparePrice={product.comparePrice ? Number(product.comparePrice) : undefined}
-                images={product.images.length > 0 ? product.images : ["/logo-tee.png"]}
-                category={product.category.name}
-                featured={product.featured}
-                variants={product.variants.map((v) => ({
-                  id: v.id,
-                  size: v.size,
-                  color: v.color,
-                  stock: v.stock,
-                }))}
-              />
-            ))}
+            {products.map((product) => {
+              const p = toProductCard(product);
+              return (
+                <ProductCard
+                  key={p.id}
+                  id={p.id}
+                  name={p.name}
+                  slug={p.slug}
+                  price={p.price}
+                  comparePrice={p.comparePrice}
+                  images={p.images}
+                  category={p.category}
+                  featured={p.featured}
+                  variants={p.variants}
+                />
+              );
+            })}
           </div>
         )}
 

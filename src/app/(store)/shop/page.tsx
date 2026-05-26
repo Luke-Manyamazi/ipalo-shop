@@ -3,7 +3,7 @@ import { Suspense } from "react";
 import { ShopFilters } from "@/components/shop/ShopFilters";
 import { ShopGrid } from "@/components/shop/ShopGrid";
 import { ShopSort } from "@/components/shop/ShopSort";
-import { db } from "@/lib/db";
+import { getProducts, getCategories, toProductCard } from "@/lib/supabase-admin";
 
 export const dynamic = "force-dynamic";
 
@@ -23,64 +23,24 @@ interface ShopPageProps {
   }>;
 }
 
-async function getProducts(params: Awaited<ShopPageProps["searchParams"]>) {
-  const { category, sort, min, max, page = "1" } = params;
-  const skip = (parseInt(page) - 1) * 12;
-
-  const where = {
-    active: true,
-    ...(category && { category: { slug: category } }),
-    ...((min || max) && {
-      price: {
-        ...(min ? { gte: parseFloat(min) } : {}),
-        ...(max ? { lte: parseFloat(max) } : {}),
-      },
-    }),
-  };
-
-  const orderBy =
-    sort === "price-asc"
-      ? { price: "asc" as const }
-      : sort === "price-desc"
-      ? { price: "desc" as const }
-      : sort === "newest"
-      ? { createdAt: "desc" as const }
-      : { featured: "desc" as const };
-
-  try {
-    const [products, total] = await Promise.all([
-      db.product.findMany({
-        where,
-        orderBy,
-        skip,
-        take: 12,
-        include: { category: true, variants: true },
-      }),
-      db.product.count({ where }),
-    ]);
-    return { products, total };
-  } catch {
-    return { products: [], total: 0 };
-  }
-}
-
-async function getCategories() {
-  try {
-    return await db.category.findMany({ orderBy: { name: "asc" } });
-  } catch {
-    return [];
-  }
-}
-
 export default async function ShopPage({ searchParams }: ShopPageProps) {
   const params = await searchParams;
+  const page = parseInt(params.page ?? "1");
 
-  const [{ products, total }, categories] = await Promise.all([
-    getProducts(params),
+  const [{ products: rawProducts, total }, allCategories] = await Promise.all([
+    getProducts({
+      categorySlug: params.category,
+      sort: params.sort,
+      minPrice: params.min ? parseFloat(params.min) : undefined,
+      maxPrice: params.max ? parseFloat(params.max) : undefined,
+      page,
+      limit: 12,
+    }),
     getCategories(),
   ]);
 
-  const currentCategory = categories.find((c) => c.slug === params.category);
+  const products = rawProducts.map(toProductCard);
+  const currentCategory = allCategories.find((c) => c.slug === params.category);
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 lg:py-16">
@@ -98,7 +58,7 @@ export default async function ShopPage({ searchParams }: ShopPageProps) {
         {/* Sidebar Filters */}
         <aside className="hidden lg:block w-56 flex-shrink-0">
           <Suspense>
-            <ShopFilters categories={categories} currentCategory={params.category} />
+            <ShopFilters categories={allCategories} currentCategory={params.category} />
           </Suspense>
         </aside>
 
@@ -118,10 +78,7 @@ export default async function ShopPage({ searchParams }: ShopPageProps) {
               {Array.from({ length: Math.ceil(total / 12) }, (_, i) => i + 1).map((p) => (
                 <a
                   key={p}
-                  href={`?${new URLSearchParams({
-                    ...params,
-                    page: String(p),
-                  })}`}
+                  href={`?${new URLSearchParams({ ...params, page: String(p) })}`}
                   className={`w-9 h-9 flex items-center justify-center rounded-md text-sm border transition-colors ${
                     String(p) === (params.page ?? "1")
                       ? "bg-black text-white border-black"

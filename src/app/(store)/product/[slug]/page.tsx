@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { ProductGallery } from "@/components/products/ProductGallery";
 import { ProductInfo } from "@/components/products/ProductInfo";
-import { db } from "@/lib/db";
+import { getProductBySlug } from "@/lib/supabase-admin";
 
 interface ProductPageProps {
   params: Promise<{ slug: string }>;
@@ -62,14 +62,31 @@ async function getProduct(slug: string) {
   if (DEMO[slug]) return DEMO[slug];
 
   try {
-    return await db.product.findUnique({
-      where: { slug, active: true },
-      include: {
-        category: true,
-        variants: { orderBy: [{ size: "asc" }, { color: "asc" }] },
-        reviews: { where: { approved: true }, include: { user: { select: { name: true } } } },
-      },
-    });
+    const product = await getProductBySlug(slug);
+    if (!product) return null;
+    return {
+      id: product.id,
+      name: product.name,
+      slug: product.slug,
+      description: product.description,
+      price: Number(product.price),
+      comparePrice: product.compare_price ? Number(product.compare_price) : null,
+      sku: product.sku,
+      weight: product.weight,
+      images: product.images ?? [],
+      tags: product.tags ?? [],
+      featured: product.featured,
+      active: product.active,
+      category: product.category ?? { id: "", name: "", slug: "" },
+      variants: (product.variants ?? []).map((v) => ({
+        id: v.id,
+        size: v.size,
+        color: v.color,
+        stock: v.stock,
+        price: v.price ? Number(v.price) : null,
+      })),
+      reviews: [],
+    };
   } catch {
     return null;
   }
