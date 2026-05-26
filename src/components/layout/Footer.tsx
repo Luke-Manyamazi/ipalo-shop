@@ -42,11 +42,11 @@ export function Footer() {
           {/* Brand */}
           <div className="col-span-2 md:col-span-1">
             <Image
-              src="/logo-full.png"
+              src="/logo-ipalo-2.png"
               alt="ipalo"
-              width={120}
-              height={40}
-              className="h-8 w-auto object-contain invert mb-4"
+              width={150}
+              height={50}
+              className="h-12 w-auto object-contain invert mb-4"
             />
             <p className="text-white/50 text-xs leading-relaxed mb-6">
               it&apos;s more than a gift. Born in Zambia, raised in love — ipalo is a lifestyle
@@ -142,7 +142,7 @@ export function Footer() {
               </li>
               <li className="flex items-start gap-2 text-white/60 text-sm">
                 <Phone className="h-4 w-4 mt-0.5 flex-shrink-0" />
-                <span>+27 (0) 10 000 0000</span>
+                <a href="tel:+27674073148" className="hover:text-white transition-colors">+27 67 407 3148</a>
               </li>
               <li className="flex items-start gap-2 text-white/60 text-sm">
                 <MapPin className="h-4 w-4 mt-0.5 flex-shrink-0" />

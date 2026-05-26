@@ -9,7 +9,24 @@
       "PowerShell(supabase *)",
       "PowerShell(cd \"C:\\\\Users\\\\Luke\\\\Dev\\\\ipalo-shop\"; npx tsx scripts/verify-db.ts 2>&1 | Where-Object { $_ -notmatch \"injected env|tip:\" })",
       "PowerShell(cd \"C:\\\\Users\\\\Luke\\\\Dev\\\\ipalo-shop\"; npx tsx scripts/update-admin.ts 2>&1 | Where-Object { $_ -notmatch \"injected env|tip:\" })",
-      "PowerShell(vercel *)"
+      "PowerShell(vercel *)",
+      "PowerShell(netstat *)",
+      "Bash(vercel env *)",
+      "Read(//tmp/**)",
+      "Bash(rm -f /tmp/verify_prod.env)",
+      "Bash(vercel ls *)",
+      "Bash(vercel inspect *)",
+      "Bash(curl *)",
+      "Bash(vercel logs *)",
+      "Bash(npx prisma *)",
+      "Bash(node *)",
+      "Bash(git add *)",
+      "Bash(git commit -m 'fix: SSL + max:1 pool for Supabase serverless; shop page error handling *)",
+      "Bash(git push *)",
+      "Bash(Get-ChildItem -Path \"C:\\\\Users\\\\Luke\\\\Documents\\\\Brand Ipalo\" -File)",
+      "Bash(Select-Object Name)",
+      "Bash(npm run *)",
+      "Bash(npx tsx *)"
     ]
   }
 }

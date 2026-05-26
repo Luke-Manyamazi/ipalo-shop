@@ -60,11 +60,11 @@ export function Header() {
             {/* Logo — centred on mobile, left-aligned on desktop */}
             <Link href="/" className="absolute left-1/2 -translate-x-1/2 lg:static lg:translate-x-0 flex-shrink-0">
               <Image
-                src="/logo-full.png"
+                src="/logo-ipalo-2.png"
                 alt="ipalo — it's more than a gift"
-                width={130}
-                height={44}
-                className="h-9 w-auto object-contain"
+                width={160}
+                height={54}
+                className="h-12 w-auto object-contain"
                 priority
               />
             </Link>
