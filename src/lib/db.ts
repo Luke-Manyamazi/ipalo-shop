@@ -1,29 +1,27 @@
 import { PrismaClient } from "@prisma/client";
 import { PrismaPg } from "@prisma/adapter-pg";
-import { Pool } from "pg";
 
 const globalForPrisma = globalThis as unknown as {
   prisma: PrismaClient | undefined;
 };
 
 function createPrismaClient() {
-  // Always use the pg Pool + PrismaPg adapter (Prisma 7 pattern).
-  // If DATABASE_URL is missing we fall back to a localhost URL so the error
-  // is a clear connection-refused rather than a confusing "base" host error.
-  // Use || not ?? so empty string also falls back to the placeholder
+  // Always use the PrismaPg adapter (Prisma 7 driver-adapter pattern).
+  // Pass config DIRECTLY to PrismaPg (not a Pool instance) to avoid the
+  // Next.js module-bundling instanceof mismatch where our Pool from "pg"
+  // is not recognised as the adapter's Pool, causing silent connection failures.
   const connectionString =
     process.env.DATABASE_URL || "postgresql://localhost:5432/ipalo";
 
-  // max:1 limits connections per serverless instance (Vercel Fluid Compute).
-  // ssl.rejectUnauthorized:false is needed for Supabase→Vercel TLS without cert pinning.
-  const pool = new Pool({
+  const adapter = new PrismaPg({
     connectionString,
+    // Limit to 1 connection per serverless function instance (Fluid Compute).
     max: 1,
+    // Supabase requires SSL; disable strict cert validation for Vercel→Supabase.
     ssl: connectionString.includes("supabase.co")
       ? { rejectUnauthorized: false }
       : undefined,
   });
-  const adapter = new PrismaPg(pool);
 
   return new PrismaClient({
     adapter,
