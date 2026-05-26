@@ -28,7 +28,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "en_ZA",
-    url: process.env.NEXT_PUBLIC_APP_URL,
+    url: process.env.NEXT_PUBLIC_APP_URL ?? "https://ipalo-shop.vercel.app",
     siteName: "ipalo™",
     title: "ipalo™ — it's more than a gift",
     description: "Premium lifestyle clothing & accessories. Shop our curated collection.",
