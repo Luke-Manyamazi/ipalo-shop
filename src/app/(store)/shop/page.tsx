@@ -5,6 +5,8 @@ import { ShopGrid } from "@/components/shop/ShopGrid";
 import { ShopSort } from "@/components/shop/ShopSort";
 import { db } from "@/lib/db";
 
+export const dynamic = "force-dynamic";
+
 export const metadata: Metadata = {
   title: "Shop",
   description:
@@ -45,22 +47,29 @@ async function getProducts(params: Awaited<ShopPageProps["searchParams"]>) {
       ? { createdAt: "desc" as const }
       : { featured: "desc" as const };
 
-  const [products, total] = await Promise.all([
-    db.product.findMany({
-      where,
-      orderBy,
-      skip,
-      take: 12,
-      include: { category: true, variants: true },
-    }),
-    db.product.count({ where }),
-  ]);
-
-  return { products, total };
+  try {
+    const [products, total] = await Promise.all([
+      db.product.findMany({
+        where,
+        orderBy,
+        skip,
+        take: 12,
+        include: { category: true, variants: true },
+      }),
+      db.product.count({ where }),
+    ]);
+    return { products, total };
+  } catch {
+    return { products: [], total: 0 };
+  }
 }
 
 async function getCategories() {
-  return db.category.findMany({ orderBy: { name: "asc" } });
+  try {
+    return await db.category.findMany({ orderBy: { name: "asc" } });
+  } catch {
+    return [];
+  }
 }
 
 export default async function ShopPage({ searchParams }: ShopPageProps) {

@@ -14,7 +14,15 @@ function createPrismaClient() {
   const connectionString =
     process.env.DATABASE_URL || "postgresql://localhost:5432/ipalo";
 
-  const pool = new Pool({ connectionString });
+  // max:1 limits connections per serverless instance (Vercel Fluid Compute).
+  // ssl.rejectUnauthorized:false is needed for Supabase→Vercel TLS without cert pinning.
+  const pool = new Pool({
+    connectionString,
+    max: 1,
+    ssl: connectionString.includes("supabase.co")
+      ? { rejectUnauthorized: false }
+      : undefined,
+  });
   const adapter = new PrismaPg(pool);
 
   return new PrismaClient({
