@@ -29,7 +29,13 @@
       "Bash(npx tsx *)",
       "Bash(git reset *)",
       "Bash(git commit -m 'feat: brand logo, 12 new products, 13 new pages, phone number, sign-in fix *)",
-      "Bash(grep -v \"^$\")"
+      "Bash(grep -v \"^$\")",
+      "Bash(Get-ChildItem -Path \"C:\\\\Users\\\\Luke\\\\Dev\\\\ipalo-shop\\\\src\\\\components\\\\home\" -File)",
+      "Bash(git commit -m 'fix: pass PrismaPg config directly to avoid Next.js instanceof mismatch *)",
+      "Bash(python3 -c \"import sys,json; d=json.load\\(sys.stdin\\); print\\(json.dumps\\(d, indent=2\\)\\)\")",
+      "Bash(git commit --allow-empty -m 'chore: trigger redeploy with updated DATABASE_URL \\(port 6543\\) *)",
+      "Bash(git commit -m 'fix: replace Prisma reads with Supabase REST API \\(bypasses IPv6 block\\) *)",
+      "Bash(npx tsc *)"
     ]
   }
 }

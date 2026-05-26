@@ -46,7 +46,7 @@ export function Footer() {
               alt="ipalo"
               width={150}
               height={50}
-              className="h-12 w-auto object-contain invert mb-4"
+              className="h-16 w-auto object-contain invert mb-4"
             />
             <p className="text-white/50 text-xs leading-relaxed mb-6">
               it&apos;s more than a gift. Born in Zambia, raised in love — ipalo is a lifestyle
